@@ -1,5 +1,7 @@
 import pygame
 import pygame_gui
+import os
+import fnmatch
 
 class Keyboard:
     def __init__(self, gui_manager, search_input):
@@ -186,20 +188,38 @@ class SearchApp:
         self.button_index_keyboard = 0
         self.active_button_keyboard = self.button_list_keyboard[self.button_index_keyboard]
         
+    def search_directory(self, path, search_string='', excluded_exts=None):
+        """
+        Search a directory (and its subdirectories) for files matching the given search string, excluding any file types
+        specified in exclude_types.
+        """
+        files = []
+        for root, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                if any(filename.endswith(ext) for ext in excluded_exts):
+                    continue
+                if fnmatch.fnmatch(filename, '*' + search_string + '*'):
+                    files.append(os.path.join(root, filename))
+        return files
+        
     def resetButtonListMain(self):
         self.button_list_main = [self.search_input, self.search_button, *self.results_list.item_list_container.elements]
         
     def handleSearch(self):
-        # Clear previous search results
-        self.results_list.set_item_list([])
+        if self.search_input.text != "":
+            # Clear previous search results
+            self.results_list.set_item_list([])
 
-        # Perform search and results list
-        # query = search_box.text
-        # perform_search(query)
-        query = self.search_input.text
-        results = self.sorted_search_results
-        self.results_list.add_items(results)
-        self.resetButtonListMain()            
+            # Perform search
+            query = self.search_input.text
+            directory = "D:\Games\EMULATION\RG35XX\Roms"
+            exclude_extensions = [".png", ".jpg", ".jpeg"]
+            matching_files = self.search_directory(directory, query, exclude_extensions)
+            print("MATCHES", matching_files)
+            
+            results = sorted(matching_files)
+            self.results_list.add_items(results)
+            self.resetButtonListMain()            
         
     def toggleKeyboard(self):
         self.keyboard.togglePanel()
