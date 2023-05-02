@@ -119,48 +119,6 @@ class SearchApp:
             manager=self.gui_manager
         )
 
-        # Search results mock data
-        self.search_results = [
-            "Mario Bros., Arcade",
-            "Super Mario Bros., NES",
-            "Super Mario Bros.: The Lost Levels, NES",
-            "Super Mario Bros. 2, NES",
-            "Super Mario Bros. 3, NES",
-            "Super Mario Land, Game Boy",
-            "Super Mario World, SNES",
-            "Super Mario Land 2: 6 Golden Coins, Game Boy",
-            "Super Mario All-Stars, SNES",
-            "Super Mario World 2: Yoshi's Island, SNES",
-            "Super Mario 64, Nintendo 64",
-            "Mario Kart 64, Nintendo 64",
-            "Super Mario Bros. Deluxe, Game Boy Color",
-            "Paper Mario, Nintendo 64",
-            "Mario Kart: Super Circuit, Game Boy Advance",
-            "Super Mario Sunshine, GameCube",
-            "Mario Kart: Double Dash!!, GameCube",
-            "Mario & Luigi: Superstar Saga, Game Boy Advance",
-            "Paper Mario: The Thousand-Year Door, GameCube",
-            "Mario Kart DS, Nintendo DS",
-            "New Super Mario Bros., Nintendo DS",
-            "Super Mario Galaxy, Wii",
-            "Mario Kart Wii, Wii",
-            "New Super Mario Bros. Wii, Wii",
-            "Super Mario Galaxy 2, Wii",
-            "Super Mario 3D Land, Nintendo 3DS",
-            "Mario Kart 7, Nintendo 3DS",
-            "New Super Mario Bros. 2, Nintendo 3DS",
-            "New Super Mario Bros. U, Wii U",
-            "Super Mario 3D World, Wii U",
-            "Mario Kart 8, Wii U",
-            "Super Mario Odyssey, Nintendo Switch",
-            "Mario Kart 8 Deluxe, Nintendo Switch",
-            "Super Mario Maker 2, Nintendo Switch",
-            "Paper Mario: The Origami King, Nintendo Switch",
-            "Super Mario 3D All-Stars, Nintendo Switch"
-        ]
-
-        self.sorted_search_results = sorted(self.search_results)
-
         # Results label
         self.results_label_shadow = myfont.render("Results", 1, (20, 20, 20))
         self.results_label = myfont.render("Results", 1, (255, 255, 255))
@@ -199,7 +157,15 @@ class SearchApp:
                 if any(filename.endswith(ext) for ext in excluded_exts):
                     continue
                 if fnmatch.fnmatch(filename, '*' + search_string + '*'):
-                    files.append(os.path.join(root, filename))
+                    filepath = os.path.join(root, filename)
+                    parent_folder = os.path.basename(os.path.dirname(filepath))
+                    file_name = os.path.splitext(filename)[0]
+                    
+                    # split the file name and extension and remove any parentheses and spaces from the end of the file name
+                    file_name = os.path.splitext(os.path.basename(filepath))[0].split("(")[0].strip()
+                    yield f"{file_name}, {parent_folder}"
+                    
+                    files.append(f"{file_name}, {parent_folder}")
         return files
         
     def resetButtonListMain(self):
@@ -259,11 +225,15 @@ class SearchApp:
                             self.search_input.set_text(self.search_input.text[:-1])
                         else:
                             self.search_input.set_text(self.search_input.text + event.ui_element.text)
-                            
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_LALT:
-                    self.toggleKeyboard()
                 
                 if event.type == pygame.KEYDOWN:  
+                    # Toggle on-screen keyboard
+                    if event.key == pygame.K_LALT:
+                        self.toggleKeyboard()
+                        
+                    if event.key == pygame.K_RETURN:
+                        self.handleSearch()
+                        
                     # Move between buttons with arrow keys
                     if event.key == pygame.K_LEFT:
                         if self.highlight_area == "main":
@@ -353,3 +323,44 @@ class SearchApp:
 if __name__ == '__main__':
     app = SearchApp()
     app.run()
+    
+    
+# Search results mock data
+    # self.search_results = [
+    #     "Mario Bros., Arcade",
+    #     "Super Mario Bros., NES",
+    #     "Super Mario Bros.: The Lost Levels, NES",
+    #     "Super Mario Bros. 2, NES",
+    #     "Super Mario Bros. 3, NES",
+    #     "Super Mario Land, Game Boy",
+    #     "Super Mario World, SNES",
+    #     "Super Mario Land 2: 6 Golden Coins, Game Boy",
+    #     "Super Mario All-Stars, SNES",
+    #     "Super Mario World 2: Yoshi's Island, SNES",
+    #     "Super Mario 64, Nintendo 64",
+    #     "Mario Kart 64, Nintendo 64",
+    #     "Super Mario Bros. Deluxe, Game Boy Color",
+    #     "Paper Mario, Nintendo 64",
+    #     "Mario Kart: Super Circuit, Game Boy Advance",
+    #     "Super Mario Sunshine, GameCube",
+    #     "Mario Kart: Double Dash!!, GameCube",
+    #     "Mario & Luigi: Superstar Saga, Game Boy Advance",
+    #     "Paper Mario: The Thousand-Year Door, GameCube",
+    #     "Mario Kart DS, Nintendo DS",
+    #     "New Super Mario Bros., Nintendo DS",
+    #     "Super Mario Galaxy, Wii",
+    #     "Mario Kart Wii, Wii",
+    #     "New Super Mario Bros. Wii, Wii",
+    #     "Super Mario Galaxy 2, Wii",
+    #     "Super Mario 3D Land, Nintendo 3DS",
+    #     "Mario Kart 7, Nintendo 3DS",
+    #     "New Super Mario Bros. 2, Nintendo 3DS",
+    #     "New Super Mario Bros. U, Wii U",
+    #     "Super Mario 3D World, Wii U",
+    #     "Mario Kart 8, Wii U",
+    #     "Super Mario Odyssey, Nintendo Switch",
+    #     "Mario Kart 8 Deluxe, Nintendo Switch",
+    #     "Super Mario Maker 2, Nintendo Switch",
+    #     "Paper Mario: The Origami King, Nintendo Switch",
+    #     "Super Mario 3D All-Stars, Nintendo Switch"
+    # ]
