@@ -20,4 +20,4 @@ This is a WIP search app for the RG53XX.  It's not running on-device yet.
 - [ ] Event handling for selecting a game from the list / launching a game
 - [ ] Smart scrolling of results list when highlight nears the bottom of the list
 - [ ] Button mapping guide at the bottom
-- [ ] Ensure pygame is running on SDL 1.2 and not SDL 2 (might be a show-stopper or require a Python UI replacement)
+- [ ] Ensure pygame is running on SDL 1.2 and not SDL 2 (Requires pygame 1.9.4; might be a show-stopper or require a Python UI replacement)
