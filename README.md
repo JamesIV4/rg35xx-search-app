@@ -11,7 +11,7 @@ This is a WIP search app for the RG53XX.  It's not running on-device yet.
 :heavy_check_mark: On-screen keyboard<br />
 :heavy_check_mark: Keyboard support with navigation and key events<br />
 :heavy_check_mark: Search functionaliy in place<br />
-:heavy_check_mark: Removes file extensions and parentesis from game titles
+:heavy_check_mark: Removes file extensions and parenthesis from game titles
 
 # To Do
 - [ ] Test with Python for RG35XX (https://github.com/hagibr/RG35XX)
